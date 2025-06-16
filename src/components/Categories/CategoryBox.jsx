@@ -3,10 +3,10 @@ import queryString from 'query-string';
 import { useNavigate, useSearchParams } from 'react-router-dom'
 
 const CategoryBox = ({ label, icon: Icon }) => {
+  // eslint-disable-next-line no-unused-vars
   const [params, setParams] = useSearchParams();
   const category = params.get('category');
 
-  if(category === label) console.log('yes');
 
   const navigate = useNavigate();
 
@@ -22,7 +22,7 @@ const CategoryBox = ({ label, icon: Icon }) => {
 
   return (
     <div
-      onClick={() => handleClick()}
+      onClick={handleClick}
       className={`flex 
   flex-col 
   items-center 
@@ -34,7 +34,7 @@ const CategoryBox = ({ label, icon: Icon }) => {
   transition
   cursor-pointer
   
-   ${category === label && 'border-b-neutral-800 text-neutral-800'}`} 
+   ${category === label && 'border-b-neutral-800 text-neutral-800'}`}
     >
       <Icon size={26} />
       <div className='text-sm font-medium'>{label}</div>

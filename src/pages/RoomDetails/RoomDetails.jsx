@@ -8,6 +8,7 @@ import LoadingSpinner from '../../components/Shared/LoadingSpinner'
 import useAxiosCommon from '../../hooks/useAxiosCommon'
 
 
+
 // single room object (Fake Data)
 // const room = {
 //   location: 'Pattaya, Thailand',

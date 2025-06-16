@@ -3,20 +3,24 @@ import { FcGoogle } from 'react-icons/fc'
 import toast from 'react-hot-toast'
 import { TbFidgetSpinner } from "react-icons/tb";
 import useAuth from '../../hooks/useAuth';
+import { useState } from 'react';
 
 const Login = () => {
   const navigate = useNavigate()
-  const { signInWithGoogle, signIn, loading, setLoading } = useAuth();
+  const { signInWithGoogle, signIn, loading, setLoading, resetPassword } = useAuth();
+  const [email, setEmail] = useState('');
+
+
 
   const handleSubmit = async e => {
 
 
-
     e.preventDefault();
     const form = e.target;
-
     const email = form.email.value
     const password = form.password.value
+
+    setEmail(email)
 
     try {
 
@@ -35,6 +39,25 @@ const Login = () => {
     }
 
   }
+
+  const handleResetpassword = async () => {
+    // const form = e.target
+    // const email = form.email.vale
+    console.log(email)
+    if (!email) return toast.error("please write your email")
+    try {
+      await resetPassword(email)
+      toast.success("Request successful check your email for further process...")
+      setLoading(false)
+    }
+    catch (error) {
+      console.log(error)
+      toast.error(error.message)
+      setLoading(false)
+    }
+  }
+
+
   const handleGoogleSignin = async () => {
 
     try {
@@ -76,6 +99,7 @@ const Login = () => {
                 Email address
               </label>
               <input
+                onBlur={e =>setEmail(e.target.value)}
                 type='email'
                 name='email'
                 id='email'
@@ -114,7 +138,7 @@ const Login = () => {
           </div>
         </form>
         <div className='space-y-1'>
-          <button className='text-xs hover:underline hover:text-rose-500 text-gray-400'>
+          <button onClick={handleResetpassword} className='text-xs hover:underline hover:text-rose-500 text-gray-400'>
             Forgot password?
           </button>
         </div>

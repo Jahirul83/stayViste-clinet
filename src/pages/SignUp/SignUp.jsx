@@ -1,14 +1,20 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth'
 import axios from 'axios';
+import toast from 'react-hot-toast'
+import { TbFidgetSpinner } from "react-icons/tb";
 
 const SignUp = () => {
 
-  const { createUser, signInWithGoogle, updateUserProfile } = useAuth();
+  const navigate = useNavigate()
+
+
+  const { createUser, signInWithGoogle, updateUserProfile, loading, setLoading } = useAuth();
 
 
   const handleSubmit = async e => {
+
     e.preventDefault();
     const form = e.target;
     const name = form.name.value
@@ -19,10 +25,33 @@ const SignUp = () => {
     formData.append('image', image)
 
     try {
+
+      setLoading(true);
+      // upload image and get image url
       const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData)
       console.log(data.data.display_url)
+
+
+
+      // create user
+
+      const result = await createUser(email, password)
+      console.log(result)
+
+
+      // save user name and photo in firebase
+
+      await updateUserProfile(name, data.data.display_url)
+
+      navigate('/')
+
+      toast.success('signup successfully')
+
+
     } catch (error) {
       console.log(error)
+      toast.error(error.message)
+      setLoading(false)
     }
   }
   return (
@@ -96,10 +125,11 @@ const SignUp = () => {
 
           <div>
             <button
+              disabled={loading}
               type='submit'
               className='bg-rose-500 w-full rounded-md py-3 text-white'
             >
-              Continue
+              {loading ? <TbFidgetSpinner className='animate-spin m-auto'/> : "Continue"}
             </button>
           </div>
         </form>

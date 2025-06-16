@@ -10,7 +10,7 @@ const Rooms = () => {
 
   useEffect(() => {
     setLoading(true)
-    fetch(`./rooms.json`)
+    fetch(`http://localhost:8000/rooms`)
       .then(res => res.json())
       .then(data => {
         setRooms(data)

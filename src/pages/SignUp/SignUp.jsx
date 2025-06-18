@@ -1,9 +1,9 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { FcGoogle } from 'react-icons/fc'
 import useAuth from '../../hooks/useAuth'
-import axios from 'axios';
 import toast from 'react-hot-toast'
 import { TbFidgetSpinner } from "react-icons/tb";
+import { imageUpload } from '../../api/utils';
 
 const SignUp = () => {
 
@@ -28,8 +28,8 @@ const SignUp = () => {
 
       setLoading(true);
       // upload image and get image url
-      const { data } = await axios.post(`https://api.imgbb.com/1/upload?key=${import.meta.env.VITE_IMGBB_API_KEY}`, formData)
-      console.log(data.data.display_url)
+      const image_url = await imageUpload(image)
+      console.log(image_url)
 
       // create user
 
@@ -38,7 +38,7 @@ const SignUp = () => {
 
       // save user name and photo in firebase
 
-      await updateUserProfile(name, data.data.display_url)
+      await updateUserProfile(name, image_url)
 
       navigate('/')
 

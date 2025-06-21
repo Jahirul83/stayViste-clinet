@@ -2,9 +2,14 @@ import { useState } from "react";
 import AddRoomForm from "../../../components/Form/AddRoomFrom";
 import useAuth from "../../../hooks/useAuth";
 import { imageUpload } from "../../../api/utils";
+import { Helmet } from 'react-helmet-async'
+import { useMutation } from "@tanstack/react-query";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
 
 const AddRoom = () => {
+
+    const axiosSecure = useAxiosSecure()
 
     const [imagePreview, setImagePreview] = useState()
     const [imageText, setImageText] = useState('Upload Image')
@@ -12,7 +17,7 @@ const AddRoom = () => {
     const [dates, setDates] = useState(
         {
             startDate: new Date(),
-            endDate: null,
+            endDate: new Date(),
             key: 'selection'
         }
     );
@@ -20,6 +25,19 @@ const AddRoom = () => {
     const handleDate = item => {
         setDates(item.selection)
     }
+
+    const { mutateAsync } = useMutation({
+        mutationFn: async roomData => {
+            const { data } = await axiosSecure.post('/room', roomData);
+            console.log(data);
+            return data;
+        },
+        onSuccess: () => {
+            console.log('data saved successfully');
+        },
+    });
+
+
     const handleSubmit = async e => {
         e.preventDefault();
         const form = e.target;
@@ -57,6 +75,8 @@ const AddRoom = () => {
                 host
             }
             console.table(roomData)
+            // post request to server
+            await mutateAsync(roomData)
         } catch (error) {
             console.log(error)
         }
@@ -73,7 +93,11 @@ const AddRoom = () => {
     }
 
     return (
-    
+
+        <>
+            <Helmet>
+                <title>AddRoom | Dashboard</title>
+            </Helmet>
             <AddRoomForm
                 dates={dates}
                 handleDate={handleDate}
@@ -83,6 +107,7 @@ const AddRoom = () => {
                 handleImage={handleImage}
                 imageText={imageText}
             ></AddRoomForm>
+        </>
     );
 };
 

@@ -18,6 +18,9 @@ const MyListings = () => {
     })
     console.log(rooms)
     if (isLoading) return <LoadingSpinner />
+    const handleDelete = (id)=>{
+        console.log(id)
+    }
     return (
         <>
             <Helmet>
@@ -78,7 +81,7 @@ const MyListings = () => {
                                 <tbody>
                                     {rooms.map(
                                         room =>
-                                            <RoomDataRow key={room._id} room={room} refetch={refetch} />)
+                                            <RoomDataRow key={room._id} room={room} refetch={refetch} handleDelete={handleDelete} />)
                                     }
                                     {/* Room row data */}
                                 </tbody>

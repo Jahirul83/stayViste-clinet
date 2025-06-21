@@ -2,14 +2,21 @@ import { categories } from '../Categories/CategoriesData'
 import { DateRange } from 'react-date-range';
 import { useState } from 'react'
 
-const AddRoomForm = ({ dates, handleDate, handleSubmit }) => {
+const AddRoomForm = ({
+    dates,
+    handleDate,
+    handleSubmit,
+    handleImage,
+    imagePreview,
+    imageText,
+}) => {
     const [state, setState] = useState([
         {
             startDate: new Date(),
             endDate: null,
             key: 'selection'
         }
-    ]);
+    ]); handleImage
     return (
         <div className='w-full min-h-[calc(100vh-40px)] flex flex-col justify-center items-center text-gray-800 rounded-xl bg-gray-50'>
             <form onSubmit={handleSubmit}>
@@ -75,11 +82,13 @@ const AddRoomForm = ({ dates, handleDate, handleSubmit }) => {
                             />
                         </div>
 
-                        <div className=' p-4 bg-white w-full  m-auto rounded-lg'>
+                        <div className=' p-4 bg-white w-full  m-auto rounded-lg flex justify-between    '>
                             <div className='file_upload px-5 py-3 relative border-4 border-dotted border-gray-300 rounded-lg'>
+
                                 <div className='flex flex-col w-max mx-auto text-center'>
                                     <label>
                                         <input
+                                            onChange={(e) => handleImage(e.target.files[0])}
                                             className='text-sm cursor-pointer w-36 hidden'
                                             type='file'
                                             name='image'
@@ -88,12 +97,18 @@ const AddRoomForm = ({ dates, handleDate, handleSubmit }) => {
                                             hidden
                                         />
                                         <div className='bg-rose-500 text-white border border-gray-300 rounded font-semibold cursor-pointer p-1 px-3 hover:bg-rose-500'>
-                                            Upload Image
+                                            {/* {imageText} */}
+
+                                            {imageText.length > 20 ? imageText.split('.')[0].slice(0, 12) + "..." + imageText.split('.')[1] : imageText}
                                         </div>
                                     </label>
                                 </div>
                             </div>
+                            <div className="w-16 h-16 object-cover overflow-hidden flex items-center">
+                                {imagePreview && <img src={imagePreview} />}
+                            </div>
                         </div>
+
                         <div className='flex justify-between gap-2'>
                             <div className='space-y-1 text-sm'>
                                 <label htmlFor='price' className='block text-gray-600'>

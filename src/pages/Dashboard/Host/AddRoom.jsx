@@ -5,6 +5,9 @@ import { imageUpload } from "../../../api/utils";
 
 
 const AddRoom = () => {
+
+    const [imagePreview, setImagePreview] = useState()
+    const [imageText, setImageText] = useState('Upload Image')
     const { user } = useAuth();
     const [dates, setDates] = useState(
         {
@@ -15,7 +18,6 @@ const AddRoom = () => {
     );
     // date range handler
     const handleDate = item => {
-        console.log(item)
         setDates(item.selection)
     }
     const handleSubmit = async e => {
@@ -59,13 +61,28 @@ const AddRoom = () => {
             console.log(error)
         }
 
+
     }
+
+
+
+    // handle image change
+    const handleImage = image => {
+        setImagePreview(URL.createObjectURL(image))
+        setImageText(image.name)
+    }
+
     return (
-        <div>
-            <h1>welcome to dashboard host addRoom</h1>
-            {/* form */}
-            <AddRoomForm dates={dates} handleDate={handleDate} handleSubmit={handleSubmit}></AddRoomForm>
-        </div>
+    
+            <AddRoomForm
+                dates={dates}
+                handleDate={handleDate}
+                handleSubmit={handleSubmit}
+                setImagePreview={setImagePreview}
+                imagePreview={imagePreview}
+                handleImage={handleImage}
+                imageText={imageText}
+            ></AddRoomForm>
     );
 };
 
